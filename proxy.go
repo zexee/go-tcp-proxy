@@ -17,9 +17,6 @@ type Proxy struct {
 	tlsUnwrapp    bool
 	tlsAddress    string
 
-	Matcher  func([]byte)
-	Replacer func([]byte) []byte
-
 	// Settings
 	Nagles    bool
 	Log       Logger
@@ -129,16 +126,6 @@ func (p *Proxy) pipe(src, dst io.ReadWriter) {
 			return
 		}
 		b := buff[:n]
-
-		//execute match
-		if p.Matcher != nil {
-			p.Matcher(b)
-		}
-
-		//execute replace
-		if p.Replacer != nil {
-			b = p.Replacer(b)
-		}
 
 		//show output
 		p.Log.Debug(dataDirection, n, "")
