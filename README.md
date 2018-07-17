@@ -5,7 +5,7 @@ A small TCP proxy written in Go
 ## Usage
 
 ```
-go get github.com/jpillora/go-tcp-proxy/cmd/tcp-proxy
+go get github.com/zexee/go-tcp-proxy/cmd/tcp-proxy
 ```
 
 ```
