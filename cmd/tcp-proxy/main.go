@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
   "encoding/json"
-  "../../"
+  "github.com/zexee/go-tcp-proxy"
 )
 
 var (
