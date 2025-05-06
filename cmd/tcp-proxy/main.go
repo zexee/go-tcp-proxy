@@ -6,10 +6,13 @@ import (
 	"net"
 	"os"
   "encoding/json"
-  "github.com/zexee/go-tcp-proxy"
+  proxy "github.com/zexee/go-tcp-proxy"
+	"regexp"
+	"strings"
 )
 
 var (
+	version = "0.0.0-src"
 	matchid = uint64(0)
 	connid  = uint64(0)
 	logger  proxy.ColorLogger
@@ -56,7 +59,7 @@ func main() {
     *remoteAddr = config.Remote
   }
 
-	logger.Info("Proxying from %v to %v", *localAddr, *remoteAddr)
+	logger.Info("go-tcp-proxy (%s) proxing from %v to %v", version, *localAddr, *remoteAddr)
 
 	laddr, err := net.ResolveTCPAddr("tcp", *localAddr)
 	if err != nil {

@@ -2,11 +2,13 @@
 
 A small TCP proxy written in Go
 
-## Usage
+This project was intended for debugging text-based protocols. The next version will address binary protocols.
 
-```
+## Install
 go get github.com/zexee/go-tcp-proxy/cmd/tcp-proxy
 ```
+
+## Usage
 
 ```
 $ tcp-proxy --help
@@ -65,3 +67,40 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
+
+### Match Example
+
+```
+$ tcp-proxy -r echo.jpillora.com:80 -match 'Host: (.+)'
+Proxying from localhost:9999 to echo.jpillora.com:80
+Matching Host: (.+)
+
+#run curl again...
+
+Connection #001 Match #1: Host: echo.jpillora.com
+```
+
+### Replace Example
+
+```
+$ tcp-proxy -r echo.jpillora.com:80 -replace '"ip": "([^"]+)"~"ip": "REDACTED"'
+Proxying from localhost:9999 to echo.jpillora.com:80
+Replacing "ip": "([^"]+)" with "ip": "REDACTED"
+```
+
+```
+#run curl again...
+{
+  "ip": "REDACTED",
+  ...
+```
+
+*Note: The `-replace` option is in the form `regex~replacer`. Where `replacer` may contain `$N` to substitute in group `N`.*
+
+### Todo
+
+* Implement `tcpproxy.Conn` which provides accounting and hooks into the underlying `net.Conn`
+* Verify wire protocols by providing `encoding.BinaryUnmarshaler` to a `tcpproxy.Conn`
+* Modify wire protocols by also providing a map function
+* Implement [SOCKS v5](https://www.ietf.org/rfc/rfc1928.txt) to allow for user-decided remote addresses
